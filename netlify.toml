@@ -1,0 +1,4 @@
+[build]
+  base = "테스트"
+  command = "npm install --include=dev && npm run build"
+  publish = "dist"
