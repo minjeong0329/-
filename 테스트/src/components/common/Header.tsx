@@ -8,6 +8,7 @@ interface HeaderProps {
   preferences: UserPreferences;
   onToggleRestMode: () => void;
   onOpenNotifications: () => void;
+  onOpenAiCoach: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -15,6 +16,7 @@ export const Header: React.FC<HeaderProps> = ({
   preferences,
   onToggleRestMode,
   onOpenNotifications,
+  onOpenAiCoach,
 }) => {
   return (
     <header className="sticky top-0 z-30 bg-[#F8F7F2]/95 backdrop-blur-sm border-b border-[#E8E5D8] px-4 py-3 flex items-center justify-between">
@@ -28,8 +30,21 @@ export const Header: React.FC<HeaderProps> = ({
         </h1>
       </div>
 
-      {/* Right Controls: Points, Rest Mode, Notifications */}
-      <div className="flex items-center space-x-2">
+      {/* Right Controls: Points, AI Button, Rest Mode, Notifications */}
+      <div className="flex items-center space-x-1.5">
+        {/* AI Assistant Button */}
+        <button
+          onClick={() => {
+            sound.playClick();
+            onOpenAiCoach();
+          }}
+          className="min-h-[36px] px-2.5 rounded-full bg-[#EDF4E4] border border-[#B8CE90] text-[#586A41] text-xs font-bold flex items-center space-x-1 active:scale-95 transition-all shadow-soft"
+          title="미루미 AI 비서 & 1:1 코치 (gemini-3.8-flash)"
+        >
+          <Sparkles className="w-3.5 h-3.5" />
+          <span className="text-[11px]">AI</span>
+        </button>
+
         {/* Points Chip */}
         <div
           className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-[#F4F2E9] border border-[#E3DFD4] text-xs font-semibold text-[#586A41]"
@@ -45,7 +60,7 @@ export const Header: React.FC<HeaderProps> = ({
             sound.playClick();
             onToggleRestMode();
           }}
-          className={`min-w-[40px] min-h-[40px] rounded-full flex items-center justify-center transition-all ${
+          className={`min-w-[36px] min-h-[36px] rounded-full flex items-center justify-center transition-all ${
             preferences.isRestMode
               ? 'bg-[#EAF0F8] text-[#4B6B94] border border-[#B8D0EC]'
               : 'bg-[#F4F2E9] text-[#686E63] hover:text-[#292D27]'
@@ -53,7 +68,7 @@ export const Header: React.FC<HeaderProps> = ({
           title={preferences.isRestMode ? '휴식 모드 켜짐' : '휴식 모드 전환'}
           aria-label="휴식 모드"
         >
-          {preferences.isRestMode ? <Moon className="w-4 h-4 fill-current" /> : <Sun className="w-4 h-4" />}
+          {preferences.isRestMode ? <Moon className="w-3.5 h-3.5 fill-current" /> : <Sun className="w-3.5 h-3.5" />}
         </button>
 
         {/* Notification Bell */}
@@ -62,11 +77,11 @@ export const Header: React.FC<HeaderProps> = ({
             sound.playClick();
             onOpenNotifications();
           }}
-          className="min-w-[40px] min-h-[40px] rounded-full flex items-center justify-center bg-[#F4F2E9] text-[#686E63] hover:text-[#292D27] active:scale-95"
+          className="min-w-[36px] min-h-[36px] rounded-full flex items-center justify-center bg-[#F4F2E9] text-[#686E63] hover:text-[#292D27] active:scale-95"
           title="알림 설정 및 내역"
           aria-label="알림"
         >
-          <Bell className="w-4 h-4" />
+          <Bell className="w-3.5 h-3.5" />
         </button>
       </div>
     </header>

@@ -24,6 +24,9 @@ export const DEFAULT_PREFERENCES: UserPreferences = {
   isRestMode: false,
   isNotificationsEnabled: false,
   hasCompletedOnboarding: false,
+  geminiApiKey: '',
+  openaiApiKey: '',
+  aiProvider: 'gemini',
 };
 
 // Initial default character state

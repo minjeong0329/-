@@ -47,6 +47,8 @@ import { ItemShop } from './components/manager/ItemShop';
 import { StatisticsView } from './components/manager/StatisticsView';
 import { PreferencesSettings } from './components/manager/PreferencesSettings';
 import { OnboardingModal } from './components/onboarding/OnboardingModal';
+import { AiCoachModal } from './components/ai/AiCoachModal';
+import { ApiKeyModal } from './components/ai/ApiKeyModal';
 
 export default function App() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -73,6 +75,8 @@ export default function App() {
   const [tempRescheduledTasks, setTempRescheduledTasks] = useState<Task[]>([]);
   const [isDelayModalOpen, setIsDelayModalOpen] = useState(false);
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
+  const [isAiCoachOpen, setIsAiCoachOpen] = useState(false);
+  const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
   const [isBreakMode, setIsBreakMode] = useState(false);
   const [activeFocusTaskId, setActiveFocusTaskId] = useState<string | null>(null);
 
@@ -426,6 +430,19 @@ export default function App() {
     }
   };
 
+  // API Key Save Handler
+  const handleSaveApiKey = async (key: string, prov: 'gemini' | 'openai') => {
+    const updated: UserPreferences = {
+      ...preferences,
+      geminiApiKey: prov === 'gemini' ? key : preferences.geminiApiKey,
+      openaiApiKey: prov === 'openai' ? key : preferences.openaiApiKey,
+      aiProvider: prov,
+    };
+    setPreferences(updated);
+    await storage.savePreferences(updated);
+    addToast(key ? 'AI API 키가 성공적으로 저장되었습니다!' : 'API 키가 삭제되었습니다.', 'success');
+  };
+
   // Reset Data Handler
   const handleResetData = async () => {
     localStorage.clear();
@@ -469,6 +486,7 @@ export default function App() {
           setActiveTab('manager');
           setManagerSubTab('settings');
         }}
+        onOpenAiCoach={() => setIsAiCoachOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -484,6 +502,7 @@ export default function App() {
                 setIsTaskModalOpen(true);
               }}
               onAutoSchedule={() => setIsAutoScheduleOpen(true)}
+              onOpenAiMagic={() => setIsAiCoachOpen(true)}
             />
 
             {/* Weekly Navigation Strip */}
@@ -734,6 +753,7 @@ export default function App() {
                   addToast('설정이 저장되었습니다.', 'success');
                 }}
                 onResetData={handleResetData}
+                onOpenApiKeyModal={() => setIsApiKeyModalOpen(true)}
               />
             )}
           </div>
@@ -782,6 +802,7 @@ export default function App() {
         pressureLevel={preferences.pressureLevel}
         characterName={character.name}
         onAction={handleDelayAction}
+        onOpenAiCoach={() => setIsAiCoachOpen(true)}
       />
 
       <OnboardingModal
@@ -793,6 +814,33 @@ export default function App() {
           setIsOnboardingOpen(false);
           addToast(`${updated.characterName}와 함께 미루기를 극복해 봐요!`, 'success');
         }}
+      />
+
+      {/* AI Assistant Modals */}
+      <AiCoachModal
+        isOpen={isAiCoachOpen}
+        onClose={() => setIsAiCoachOpen(false)}
+        apiKey={preferences.aiProvider === 'openai' ? preferences.openaiApiKey : preferences.geminiApiKey}
+        provider={preferences.aiProvider || 'gemini'}
+        characterName={character.name}
+        pressureLevel={preferences.pressureLevel}
+        currentTasks={todayTasks}
+        activeTask={activeTask}
+        selectedDate={selectedDate}
+        onOpenApiKeyModal={() => setIsApiKeyModalOpen(true)}
+        onAddTask={handleSaveTask}
+        onStart5MinFocus={(task) => {
+          setActiveFocusTaskId(task.id);
+          setActiveTab('focus');
+        }}
+      />
+
+      <ApiKeyModal
+        isOpen={isApiKeyModalOpen}
+        onClose={() => setIsApiKeyModalOpen(false)}
+        currentKey={preferences.aiProvider === 'openai' ? preferences.openaiApiKey : preferences.geminiApiKey}
+        currentProvider={preferences.aiProvider || 'gemini'}
+        onSaveKey={handleSaveApiKey}
       />
 
       {/* Bottom Navigation */}

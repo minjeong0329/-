@@ -14,6 +14,7 @@ interface DelayInterventionModalProps {
   pressureLevel: PressureLevel;
   characterName: string;
   onAction: (action: DelayAction, reason?: DelayReason) => void;
+  onOpenAiCoach?: () => void;
 }
 
 export const DelayInterventionModal: React.FC<DelayInterventionModalProps> = ({
@@ -24,6 +25,7 @@ export const DelayInterventionModal: React.FC<DelayInterventionModalProps> = ({
   pressureLevel,
   characterName,
   onAction,
+  onOpenAiCoach,
 }) => {
   const [selectedReason, setSelectedReason] = useState<DelayReason | null>(null);
 
@@ -166,6 +168,21 @@ export const DelayInterventionModal: React.FC<DelayInterventionModalProps> = ({
             <RefreshCw className="w-3.5 h-3.5" />
             <span>오늘 남은 일정 자동 재배치</span>
           </button>
+
+          {onOpenAiCoach && (
+            <button
+              type="button"
+              onClick={() => {
+                sound.playClick();
+                onOpenAiCoach();
+                onClose();
+              }}
+              className="w-full mt-2 min-h-[40px] rounded-xl bg-[#EDF4E4] border border-[#B8CE90] text-xs font-bold text-[#586A41] flex items-center justify-center space-x-1.5 active:scale-95 shadow-soft"
+            >
+              <span>✨</span>
+              <span>{characterName} AI에게 1:1 극복 코칭 받기</span>
+            </button>
+          )}
         </div>
       </div>
     </Modal>

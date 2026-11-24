@@ -61,6 +61,30 @@ export interface UserPreferences {
   isRestMode: boolean; // 휴식 모드
   isNotificationsEnabled: boolean;
   hasCompletedOnboarding: boolean;
+  geminiApiKey?: string;
+  openaiApiKey?: string;
+  aiProvider?: 'gemini' | 'openai';
+}
+
+export interface AiTaskParsedResult {
+  title: string;
+  estimatedMinutes: number;
+  importance: Importance;
+  category: TaskCategory;
+  subtasks: string[];
+  memo?: string;
+}
+
+export interface AiChatMessage {
+  id: string;
+  sender: 'user' | 'mirumi';
+  text: string;
+  suggestedAction?: {
+    type: 'start_5min' | 'create_task';
+    label: string;
+    taskData?: Partial<Task>;
+  };
+  timestamp: string;
 }
 
 export interface FocusSession {

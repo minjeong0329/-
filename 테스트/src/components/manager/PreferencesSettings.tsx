@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { UserPreferences, PressureLevel, FocusSlot } from '../../types';
 import { sound } from '../../lib/sound';
-import { ShieldCheck, Info } from 'lucide-react';
+import { ShieldCheck, Info, Sparkles, KeyRound } from 'lucide-react';
 
 interface PreferencesSettingsProps {
   preferences: UserPreferences;
   onUpdate: (prefs: Partial<UserPreferences>) => void;
   onResetData: () => void;
+  onOpenApiKeyModal: () => void;
 }
 
 export const PreferencesSettings: React.FC<PreferencesSettingsProps> = ({
   preferences,
   onUpdate,
   onResetData,
+  onOpenApiKeyModal,
 }) => {
   const [characterName, setCharacterName] = useState(preferences.characterName);
   const [wakeTime, setWakeTime] = useState(preferences.wakeTime);
@@ -21,6 +23,8 @@ export const PreferencesSettings: React.FC<PreferencesSettingsProps> = ({
   const [breakDuration, setBreakDuration] = useState(preferences.breakDuration);
   const [pressureLevel, setPressureLevel] = useState<PressureLevel>(preferences.pressureLevel);
   const [isNotifEnabled, setIsNotifEnabled] = useState(preferences.isNotificationsEnabled);
+
+  const hasApiKey = Boolean(preferences.geminiApiKey?.trim() || preferences.openaiApiKey?.trim());
 
   const handleSave = () => {
     sound.playSuccess();
@@ -58,6 +62,39 @@ export const PreferencesSettings: React.FC<PreferencesSettingsProps> = ({
 
   return (
     <div className="space-y-5 pb-12">
+      {/* AI API Key Section */}
+      <div className="bg-white p-4 rounded-2xl border border-[#E3DFD4] space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Sparkles className="w-4 h-4 text-[#778C59]" />
+            <h3 className="text-sm font-bold text-[#292D27]">AI 비서 연동 (gemini-3.8-flash)</h3>
+          </div>
+          <span
+            className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+              hasApiKey ? 'bg-[#EDF4E4] text-[#586A41]' : 'bg-[#FAF9F5] text-[#858B7E] border border-[#E3DFD4]'
+            }`}
+          >
+            {hasApiKey ? '연동됨 ✓' : '미연동'}
+          </span>
+        </div>
+
+        <p className="text-xs text-[#686E63] leading-relaxed">
+          Google Gemini API 키를 등록하면 자연어 일정 자동 분해 및 미루미 1:1 맞춤 코칭을 무료로 사용할 수 있습니다.
+        </p>
+
+        <button
+          type="button"
+          onClick={() => {
+            sound.playClick();
+            onOpenApiKeyModal();
+          }}
+          className="w-full min-h-[44px] rounded-xl bg-[#F4F2E9] border border-[#E3DFD4] text-xs font-bold text-[#586A41] flex items-center justify-center space-x-1.5 active:scale-95"
+        >
+          <KeyRound className="w-3.5 h-3.5" />
+          <span>{hasApiKey ? 'API 키 변경 또는 삭제' : '무료 Gemini API 키 등록하기 (1분 소요)'}</span>
+        </button>
+      </div>
+
       {/* Character Profile Section */}
       <div className="bg-white p-4 rounded-2xl border border-[#E3DFD4] space-y-3">
         <h3 className="text-sm font-bold text-[#292D27]">캐릭터 및 피드백 강도</h3>
