@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="112" fill="#F8F7F2"/>
+  <circle cx="256" cy="278" r="170" fill="#D5E5B5" stroke="#778C59" stroke-width="16"/>
+  <!-- Sprout -->
+  <path d="M256 112 Q288 54 330 80 Q298 138 256 138" fill="#778C59"/>
+  <path d="M256 120 Q218 64 192 90 Q214 134 256 138" fill="#94A876"/>
+  <!-- Eyes -->
+  <circle cx="208" cy="262" r="18" fill="#292D27"/>
+  <circle cx="304" cy="262" r="18" fill="#292D27"/>
+  <circle cx="216" cy="256" r="6" fill="#FFFFFF"/>
+  <circle cx="312" cy="256" r="6" fill="#FFFFFF"/>
+  <!-- Cheeks -->
+  <ellipse cx="182" cy="300" rx="20" ry="12" fill="#F0AA95" opacity="0.9"/>
+  <ellipse cx="330" cy="300" rx="20" ry="12" fill="#F0AA95" opacity="0.9"/>
+  <!-- Smile -->
+  <path d="M230 310 Q256 342 282 310" fill="none" stroke="#292D27" stroke-width="12" stroke-linecap="round"/>
+</svg>
